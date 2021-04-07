@@ -14,14 +14,14 @@ from werkzeug.utils import secure_filename
 # Routing for your application.
 ###
 
-@app.route('/api/upload', methods=['POST'])
+@app.route('/api/upload',methods=['POST'])
 def upload():
     form= UploadForm()
-    if form.validate_on_submit():
+    if request.method=='POST' and form.validate_on_submit():
         desc=form.desc.data
-        image=form.image.data
-        filename=secure_filename(image.filename)
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        photo=form.photo.data
+        filename=secure_filename(photo.filename)
+        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         
         upload={
             "message":"File Upload Successful",
@@ -31,6 +31,7 @@ def upload():
         return jsonify(upload=upload)
 
     return jsonify(form_errors(form))
+
 
 # Please create all new routes and view functions above this route.
 # This route is now our catch all route for our VueJS single page
